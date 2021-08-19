@@ -7,3 +7,7 @@ let app = Application(env)
 defer { app.shutdown() }
 try configure(app)
 try app.run()
+
+print(app.routes)
+print(env)
+print(app)

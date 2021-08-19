@@ -28,4 +28,15 @@ final class Category: Model, Content, Codable {
         self.id = id
         self.title = title
     }
+
 }
+
+final class CategoryNumbers: Content, Codable {
+    
+    var number: Int
+    
+    init(number: Int) {
+        self.number = number
+    }
+}
+

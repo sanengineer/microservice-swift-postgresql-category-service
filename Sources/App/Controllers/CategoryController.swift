@@ -5,6 +5,7 @@ struct CategoryController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let categories = routes.grouped("category")
         categories.get(use: index)
+        categories.get("count", use: indexCount)
         categories.post(use: create)
         categories.group(":categoryID") { todo in
             todo.delete(use: delete)
@@ -13,6 +14,16 @@ struct CategoryController: RouteCollection {
 
     func index(req: Request) throws -> EventLoopFuture<[Category]> {
         return Category.query(on: req.db).all()
+    }
+    
+    func indexCount(req: Request) -> EventLoopFuture<CategoryNumbers> {
+        return
+            Category
+            .query(on: req.db)
+            .count()
+            .map { number in
+                CategoryNumbers(number: number)
+            }
     }
 
     func create(req: Request) throws -> EventLoopFuture<Category> {

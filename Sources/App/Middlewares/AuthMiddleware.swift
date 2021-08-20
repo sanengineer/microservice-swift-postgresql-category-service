@@ -1,6 +1,6 @@
 import Vapor
 
-final class SuperAuthMiddleware: Middleware {
+final class AuthMiddleware: Middleware {
     let authHostname: String = Environment.get("AUTH_HOSTNAME")!
     let authPort: Int = Int(Environment.get("AUTH_PORT")!)!
     
@@ -14,7 +14,7 @@ final class SuperAuthMiddleware: Middleware {
         
         return request
             .client
-            .post("http://\(authHostname):\(authPort)/superuser/auth/authenticate", beforeSend: { authRequest in
+            .post("http://\(authHostname):\(authPort)/user/auth/authenticate", beforeSend: { authRequest in
                 //debug
                 print("\n","AUTH_REQUEST",authRequest,"\n")
                 

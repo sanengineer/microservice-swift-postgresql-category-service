@@ -28,7 +28,7 @@ public func configure(_ app: Application) throws {
 
     app.http.server.configuration.port = serverPort
     app.http.server.configuration.hostname = serverHostname
-    app.migrations.add(CreateSchemaCategory(), CreateSchemaProduct())
+    app.migrations.add(CreateSchemaCategory(), CreateSchemaProduct(), AddSomeColumnOnCategorySchema())
     
     app.logger.logLevel = .debug
 

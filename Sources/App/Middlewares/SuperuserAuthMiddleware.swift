@@ -1,6 +1,6 @@
 import Vapor
 
-final class SuperAuthMiddleware: Middleware {
+final class AuthMiddleware: Middleware {
     let authHostname: String = Environment.get("AUTH_HOSTNAME")!
     let authPort: Int = Int(Environment.get("AUTH_PORT")!)!
     

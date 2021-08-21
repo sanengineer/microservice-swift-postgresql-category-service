@@ -5,22 +5,15 @@ struct CategoryController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let categories = routes.grouped("category")
       
-        
-        let categoriesAuth = categories.grouped(UserAuthMiddleware())
-        let categoriesSuperuserAuth = categories.grouped(SuperAuthMiddleware())
+        let categoriesAuth = categories.grouped(AuthMiddleware())
     
-        
         categoriesAuth.get(use: index)
-        categoriesAuth.get(":categoryID", use: indexById)
-        
-        
-        categoriesSuperuserAuth.get("superuser", use: index)
-        categoriesSuperuserAuth.get("superuser",":categoryID", use: indexById)
-        categoriesSuperuserAuth.get("count", use: indexCount)
-        categoriesSuperuserAuth.post(use: create)
-        categoriesSuperuserAuth.group(":categoryID") { category in
+        categoriesAuth.get("count", use: indexCount)
+        categoriesAuth.post(use: create)
+        categoriesAuth.group(":categoryID") { category in
             category.delete(use: delete)
             category.put(use: update)
+            category.get(use: indexById)
         }
     }
 

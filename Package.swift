@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-postgresql-category-services",
+    name: "microservice-swift-postgresql-category-service",
     platforms: [
        .macOS(.v10_15)
     ],

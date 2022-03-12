@@ -24,6 +24,7 @@ struct CategoryController: RouteCollection {
         }
 
         categoriesAuthUser.get(use: index)
+        categoriesAuthUser.get(":categoryID", use: indexById)
     }
 
     func index(req: Request) throws -> EventLoopFuture<[Category]> {

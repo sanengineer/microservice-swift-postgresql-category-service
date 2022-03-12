@@ -59,7 +59,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateSchemaCategory())
 
     //migration_for_first_deployment
-    try app.autoMigrate().wait()
+    // try app.autoMigrate().wait()
 
     // register routes
     try routes(app)

@@ -30,7 +30,7 @@ final class UserAuthMiddleware: Middleware {
                     throw Abort(.unauthorized)
                 }
                 
-                if role_id == 3 {
+                if role_id == 1 || role_id == 2 || role_id == 3 {
                 guard response.status == .ok  else {
                     if response.status == .unauthorized {
                         throw Abort(.unauthorized, reason: "UNAUTHORIZED")

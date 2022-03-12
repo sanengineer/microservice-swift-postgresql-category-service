@@ -15,12 +15,10 @@ struct CategoryController: RouteCollection {
     
         categoriesAuthSuperUser.delete(":categoryID", use: delete)
 
-        categoriesAuthMidUser.get(use: index)
         categoriesAuthMidUser.get("count", use: indexCount)
         categoriesAuthMidUser.post(use: create)
         categoriesAuthMidUser.group(":categoryID") { category in
             category.put(use: update)
-            category.get(use: indexById)
         }
 
         categoriesAuthUser.get(use: index)

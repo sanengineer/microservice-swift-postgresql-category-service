@@ -36,3 +36,25 @@ final class Category: Model, Content, Codable {
     }
 
 }
+
+final class CategoryNumbers: Content, Codable {
+
+    var number: Int
+
+    init(number: Int) {
+        self.number = number
+    }
+}
+
+
+final class UpdateCategory: Content, Codable {
+    var description: String?
+    var icon: String?
+    var image_featured: String?
+
+    init(description: String?, icon: String?, image_featured: String?) {
+        self.description = description
+        self.icon = icon
+        self.image_featured = image_featured
+    }
+}

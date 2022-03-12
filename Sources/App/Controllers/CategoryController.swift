@@ -1,37 +1,75 @@
-import Fluent
 import Vapor
+import Fluent
 
 struct CategoryController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
+
+        let superUserMiddleware = SuperUserAuthMiddleware()
+        let midUserMiddleware = MidUserAuthMiddleware()
+        let userMiddleware = UserAuthMiddleware()
         let categories = routes.grouped("category")
-<<<<<<< HEAD
       
-        let categoriesAuth = categories.grouped(AuthMiddleware())
+        let categoriesAuthSuperUser = categories.grouped(superUserMiddleware)
+        let categoriesAuthMidUser = categories.grouped(midUserMiddleware)
+        let categoriesAuthUser = categories.grouped(userMiddleware)
     
-        categoriesAuth.get(use: index)
-        categoriesAuth.get("count", use: indexCount)
-        categoriesAuth.post(use: create)
-        categoriesAuth.group(":categoryID") { category in
-            category.delete(use: delete)
+        categoriesAuthSuperUser.delete(":categoryID", use: delete)
+
+        categoriesAuthMidUser.get(use: index)
+        categoriesAuthMidUser.get("count", use: indexCount)
+        categoriesAuthMidUser.post(use: create)
+        categoriesAuthMidUser.group(":categoryID") { category in
             category.put(use: update)
             category.get(use: indexById)
         }
-=======
-        let categoriesAuth = categories.grouped(AuthMiddleware())
 
-        categoriesAuth.get(use: index)
-        categoriesAuth.get(":categoryID", use: indexById)
->>>>>>> 924ac1f03ad2db2a6a3c9e8826a3b52ceab9a531
+        categoriesAuthUser.get(use: index)
     }
 
     func index(req: Request) throws -> EventLoopFuture<[Category]> {
         return Category.query(on: req.db).sort(\.$title).all()
     }
+
+    func indexCount(req: Request) -> EventLoopFuture<CategoryNumbers> {
+        return
+            Category
+            .query(on: req.db)
+            .count()
+            .map { number in
+                CategoryNumbers(number: number)
+            }
+    }
     
     
     func indexById(req: Request) -> EventLoopFuture<Category> {
         return Category.find(req.parameters.get("categoryID"), on: req.db)
-            .unwrap(or: Abort(.noContent))
-            
+            .unwrap(or: Abort(.noContent))       
+    }
+
+    func create(req: Request) throws -> EventLoopFuture<Category> {
+        let category = try req.content.decode(Category.self)
+        return category.save(on: req.db).map { category }
+    }
+
+    func update(req: Request) throws -> EventLoopFuture<Category> {
+        let category = try req.content.decode(UpdateCategory.self)
+
+        return Category.find(req.parameters.get("categoryID"), on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap { db in
+                db.description =  category.description
+                db.image_featured = category.image_featured
+                db.icon = category.icon
+
+                return
+                   db.save(on: req.db).map{db}
+            }
+    }
+
+    func delete(req: Request) throws -> EventLoopFuture<HTTPStatus> {
+        return Category.find(req.parameters.get("categoryID"), on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap { $0.delete(on: req.db) }
+            .transform(to: .ok)
     }
 }

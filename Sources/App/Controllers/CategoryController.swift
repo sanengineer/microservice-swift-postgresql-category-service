@@ -56,9 +56,10 @@ struct CategoryController: RouteCollection {
         return Category.find(req.parameters.get("categoryID"), on: req.db)
             .unwrap(or: Abort(.notFound))
             .flatMap { db in
-                db.description =  category.description
-                db.image_featured = category.image_featured
-                db.icon = category.icon
+                db.title = category.title ?? db.title
+                db.description =  category.description ?? db.description
+                db.image_featured = category.image_featured ?? db.image_featured
+                db.icon = category.icon ?? db.icon
 
                 return
                    db.save(on: req.db).map{db}

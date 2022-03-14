@@ -6,7 +6,6 @@ struct CreateSchemaCategory: Migration {
             .id()
             .field("title", .sql(raw: "character varying(100)"), .required)
             .field("description", .sql(raw: "text"))
-            .field("product_id", .uuid)
             .field("image_featured", .string)
             .field("icon", .string)
             .field("created_at", .datetime)

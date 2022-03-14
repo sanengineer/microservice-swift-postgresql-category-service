@@ -13,9 +13,6 @@ final class Category: Model, Content, Codable {
     @OptionalField(key: "description")
     var description: String?
     
-    @OptionalField(key: "product_id")
-    var product_id: UUID?
-    
     @OptionalField(key: "icon")
     var icon: String?
     
@@ -48,11 +45,13 @@ final class CategoryNumbers: Content, Codable {
 
 
 final class UpdateCategory: Content, Codable {
+    var title: String?
     var description: String?
     var icon: String?
     var image_featured: String?
 
-    init(description: String?, icon: String?, image_featured: String?) {
+    init(title: String? ,description: String?, icon: String?, image_featured: String?) {
+        self.title = title
         self.description = description
         self.icon = icon
         self.image_featured = image_featured
